@@ -32,9 +32,7 @@ module.exports.deleteArticleById = (req, res, next) => {
 
 // the createCard request handler
 module.exports.createArticle = (req, res, next) => {
-  const {
-    keyword, title, text, date, source, link, image
-  } = req.body;
+  const { keyword, title, text, date, source, link, image } = req.body;
   const ownerId = req.user._id;
   Article.create({
     keyword,
@@ -46,15 +44,18 @@ module.exports.createArticle = (req, res, next) => {
     image,
     owner: ownerId,
   })
-    .then((article) => res.status(200).send({
-      keyword: article.keyword,
-      title: article.title,
-      text: article.text,
-      date: article.date,
-      source: article.source,
-      link: article.link,
-      image: article.image,
-    }))
+    .then((article) =>
+      res.status(200).send({
+        keyword: article.keyword,
+        title: article.title,
+        text: article.text,
+        date: article.date,
+        source: article.source,
+        link: article.link,
+        image: article.image,
+        _id: article.id,
+      })
+    )
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(err.massage));
